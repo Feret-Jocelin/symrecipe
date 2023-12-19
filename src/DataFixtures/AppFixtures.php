@@ -10,7 +10,6 @@ use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
-
     private Generator $faker;
 
     public function __construct()
