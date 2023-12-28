@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 class IngredientType extends AbstractType
 {
@@ -41,17 +43,30 @@ class IngredientType extends AbstractType
                 ],
                 'constraints' => [
                     new Assert\Positive(),
-                    new Assert\LessThan(200),
+                    new Assert\LessThan(1001),
                 ]
-            ])
-            ->add('submit', SubmitType::class,[
-                'attr'=> [
-                    'class' => 'btn btn-primary mt-4',
-                ],
-                'label'=> 'Créer un ingrédient',
-            ])
-            
-        ;
+            ]);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event): void {
+            $ingredient = $event->getData();
+            $form = $event->getForm();
+
+            if(!$ingredient || null === $ingredient->getId()) {
+                $form->add('submit', SubmitType::class,[
+                    'attr'=> [
+                        'class' => 'btn btn-primary mt-4',
+                    ],
+                    'label'=> 'Créer un ingrédient',
+                ]);
+            } else {
+                $form->add('submit', SubmitType::class, [
+                    'attr'=> [
+                        'class' => 'btn btn-primary mt-4',
+                    ],
+                    'label'=> 'Modifier l\'ingrédient',
+                ]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

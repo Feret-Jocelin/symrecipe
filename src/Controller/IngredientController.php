@@ -77,6 +77,15 @@ class IngredientController extends AbstractController
     }
 
     #[Route('ingredient/edit/{id}', name:'ingredient.edit', methods: ['GET', 'POST'])]
+    /**
+     * Route to edit an ingredient
+     *
+     * @param IngredientRepository $repository
+     * @param integer $id
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     public function edit(IngredientRepository $repository, int $id, Request $request, EntityManagerInterface $manager): Response
     {
 
@@ -105,6 +114,14 @@ class IngredientController extends AbstractController
     }
 
     #[Route('ingredient/delete/{id}', name:'ingredient.delete', methods: ['GET'])]
+    /**
+     * Route to deelte an ingredient
+     *
+     * @param IngredientRepository $repository
+     * @param EntityManagerInterface $manager
+     * @param integer $id
+     * @return Response
+     */
     public function delete(IngredientRepository $repository, EntityManagerInterface $manager, int $id): Response
     {
         $ingredient = $repository->findOneBy(['id'=> $id]);
@@ -122,7 +139,7 @@ class IngredientController extends AbstractController
 
         $this->addFlash(
             'success',
-            'Votre ingrédient a été supprimé avec succès'
+            'Votre ingrédient a été supprimée avec succès'
         );
 
         return $this->redirectToRoute('ingredient.index');
